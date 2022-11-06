@@ -20,7 +20,7 @@ const Login = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  const { setAuth } = useAuth();
+  const { setAuth, isPersist, setIsPersist } = useAuth();
 
   useEffect(() => {
     userRef.current.focus();
@@ -60,6 +60,14 @@ const Login = () => {
       errRef.current.focus();
     }
   };
+
+  const togglePersist = () => {
+    setIsPersist((prev) => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("persist", isPersist);
+  }, [isPersist]);
   return (
     <section>
       <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}>
@@ -87,6 +95,16 @@ const Login = () => {
         />
 
         <button>Sign in</button>
+
+        <div className="persistCheck">
+          <input
+            type="checkbox"
+            id="persist"
+            onChange={togglePersist}
+            checked={isPersist}
+          />
+          <label htmlFor="persist">Trust This Device</label>
+        </div>
       </form>
       <p>
         Need an Account?
